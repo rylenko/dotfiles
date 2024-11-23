@@ -1,0 +1,3 @@
+#!/bin/sh
+
+vmstat -s | grep "used memory" | awk '{printf "💿 %s MiB", $1 / 1024}'

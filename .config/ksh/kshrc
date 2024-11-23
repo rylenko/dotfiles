@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# To get last executed command with "Up" arrow
+# shellcheck disable=SC3040
+set -o emacs
+HISTFILE="${HOME}/.cache/history"
+
+# Colors
+# shellcheck disable=SC2034
+RED="\033[31m"
+BLUE="\033[34m"
+END="\033[0m"
+
+cd() {
+	# shellcheck disable=SC2164
+	command cd "$@"
+	update_ps1
+}
+
+git() {
+	command git "$@"
+	update_ps1
+}
+
+rm() {
+	command rm "$@"
+	update_ps1
+}
+
+update_ps1() {
+	uid=$(id -u)
+	git_branch=$(
+		command git branch 2>/dev/null \
+			| grep "^\*" \
+			| awk '{printf "${RED}(%s)${END} ", $2}' \
+	)
+	if [ "${uid}" -eq 0 ]; then
+		uhcolor="${RED}"
+	else
+	 	uhcolor="${BLUE}"
+	fi
+	PS1="${uhcolor}\u@\h${END} \W ${git_branch}$ "
+}
+
+# To sign git commits
+export GPG_TTY="$(tty)"
+
+alias \
+	..="cd .." \
+	cgr="git config user.name rylenko && git config user.email rylenko@tuta.io && git config user.signingkey 0C8755F6E37D3493 && git config commit.gpgsign true && git config core.sshCommand \"ssh -i ~/.ssh/daily\"" \
+	cp="cp -iv" \
+	diff="diff --color=auto" \
+	f="find . 2>/dev/null | fzf" \
+	getip="curl ident.me" \
+	gp="gpg --gen-random --armor 1 30" \
+	grep="grep -n --color=auto" \
+	ip="ip -color=auto" \
+	ls="ls --color=auto" \
+	mkdir="mkdir -p" \
+	mv="mv -iv" \
+	p="doas pacman" \
+	rm="rm -iv" \
+	t="tmux -u" \
+	trem="transmission-remote" \
+	v="vis" \
+	z="zathura"
+
+update_ps1

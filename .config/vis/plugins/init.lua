@@ -1,0 +1,5 @@
+require("plugins/commentary")
+require("plugins/filetype")
+require("plugins/fzf")
+require("plugins/ins-completion")
+require("plugins/modelines")

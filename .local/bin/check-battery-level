@@ -1,0 +1,15 @@
+#!/bin/sh
+
+DELAY=60
+
+while true; do
+	level=$(acpi -b | grep -P -o '[0-9]+(?=%)')
+	[ "$level" -le "$BATTERY_LOW_LEVEL_FROM" ] \
+		&& ! acpi -b | grep -q "Charging" \
+		&& herbe-bg \
+			"Battery level checker" \
+			"---------------------" \
+			"Low battery level!"
+
+	sleep "$DELAY"
+done

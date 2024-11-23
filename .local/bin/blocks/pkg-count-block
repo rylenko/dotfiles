@@ -1,0 +1,4 @@
+#!/bin/sh
+
+count=$(pacman -Q | wc -l)
+echo "📦 $count"

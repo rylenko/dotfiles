@@ -1,0 +1,21 @@
+#!/bin/sh
+
+COLOR_TEMP=3700
+
+XIDLE_TIMEOUT=30
+XIDLE_PROG=$(which slock)
+
+# Usage: `autostart <program> <args>`
+autostart() {
+	program=$1
+	shift
+	pgrep -f "$program" 1>/dev/null || ${program} "$@" &
+}
+
+xwallpaper --zoom "$WALLPAPER_CURRENT_PATH"
+sct "$COLOR_TEMP"
+
+autostart dwmblocks
+autostart xcompmgr
+autostart xidle -timeout "$XIDLE_TIMEOUT" -program "$XIDLE_PROG"
+autostart check-battery-level

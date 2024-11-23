@@ -1,0 +1,12 @@
+#!/bin/sh
+
+URL="https://wttr.in/?format=%t\n"
+
+fail() {
+	echo "🌡 No weather" && exit 0
+}
+
+response=$(curl -sf -m 2 --connect-timeout 2 "$URL") || fail
+[ -z "$response" ] && fail
+
+echo "🌡$response"

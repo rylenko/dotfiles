@@ -1,0 +1,6 @@
+#!/bin/sh
+# Usage: `sizes <path>`
+
+[ -z "$1" ] && exit 1
+
+du -a -d 1 -h "$1" | sort -hr | less

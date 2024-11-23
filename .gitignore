@@ -1,0 +1,14 @@
+*.o
+
+dwm/dwm
+
+dwmblocks/dwmblocks
+
+dmenu/dmenu
+dmenu/*.tar.gz
+dmenu/stest
+
+herbe/herbe
+
+st/st
+st/*.orig

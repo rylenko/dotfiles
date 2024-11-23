@@ -1,0 +1,13 @@
+#!/bin/sh
+
+level=$(acpi -b | grep -P -o '[0-9]+(?=%)')
+
+if acpi -b | grep -q "Charging"; then
+	emoji="🔌 "
+elif [ "$level" -le "$BATTERY_LOW_LEVEL_FROM" ]; then
+	emoji="❗"
+else
+	emoji="🔋"
+fi
+
+echo "$emoji$level%"

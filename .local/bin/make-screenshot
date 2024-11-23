@@ -1,0 +1,10 @@
+#!/bin/sh
+
+filename="$(date +%F_%T).png"
+import "$filename" \
+	&& status="Success: $filename" \
+	|| status="Fail."
+herbe-bg \
+	 "Screenshot Maker" \
+	 "----------------" \
+	 "${status}"

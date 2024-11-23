@@ -1,0 +1,22 @@
+#!/bin/sh
+
+is_muted=$(pacmd list-sinks | awk '/muted/ { print $2 }')
+
+if [ "$is_muted" = "yes" ]; then
+	echo "🔇muted"
+else
+	level=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1)
+
+	if [ "$level" -eq "0" ]; then
+		emoji="🔇"
+	elif [ "$level" -le "33" ]; then
+		emoji="🔈"
+	elif [ "$level" -le "66" ]; then
+		emoji="🔉"
+	else
+		emoji="🔊"
+	fi
+
+	echo "$emoji$level%"
+fi
+

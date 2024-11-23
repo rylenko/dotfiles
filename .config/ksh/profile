@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Parts of `PATH`
+BINS_PATH="$HOME/.local/bin:$HOME/.local/bin/blocks:/usr/bin:/usr/local/bin"
+SBINS_PATH="/bin:/sbin:/usr/sbin:/usr/local/sbin"
+X11_BINS_PATH="/usr/X11R6/bin"
+
+export \
+	BATTERY_LOW_LEVEL_FROM=10 \
+	BROWSER="librewolf" \
+	EDITOR="vis" \
+	ENV="$HOME/.config/ksh/kshrc" \
+	LANG=en_US.UTF-8 \
+	LESS="-R --use-color" \
+	LESSHISTFILE="-" \
+	PAGER="less" \
+	PATH="$BINS_PATH:$SBINS_PATH:$X11_BINS_PATH" \
+	SFEED_HTMLCONV="w3m -O utf-8 -T text/html -o display_link_number=1" \
+	SFEED_PLUMBER="dmenu-handle-link" \
+	SFEED_URL_FILE="$HOME/.sfeed/urls" \
+	TERM="st-256color" \
+	WALLPAPER_CURRENT_PATH="$HOME/.local/share/wallpaper.jpg" \
+	WALLPAPERS_DIR="$HOME/.local/share/wallpapers" \
+	WGETRC="$HOME/.config/wget/wgetrc" \
+	XDG_CONFIG_HOME="$HOME/.config"

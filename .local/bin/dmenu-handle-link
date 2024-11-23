@@ -1,0 +1,202 @@
+#!/bin/sh
+
+BROWSER="librewolf"
+HANDLERS="browser\\ncurl\\nmpv\\ndl-audio\\ndl-video\\nnsxiv\\nzathura\\nadd-torrent"
+TORRENT_SLEEP_AFTER_START_DAEMON=5
+
+# Usage: `add_torrent <url>`
+add_torrent() {
+	# Start daemon
+	if ! pgrep -fl transmission-daemon; then
+		herbe-bg \
+			"Torrent" \
+			"-------" \
+			"Starting daemon..."
+		if transmission-daemon; then
+			sleep "$TORRENT_SLEEP_AFTER_START_DAEMON"
+		else
+			herbe-bg \
+				"Torrent" \
+				"-------" \
+				"Failed to start daemon."
+			exit 11
+		fi
+	fi
+
+	# Download and add a torrent file
+	temp=$(_download_temp "$1") &&
+	if transmission-remote -a "$temp" \
+		--download-dir ~/Downloads/ \
+		--torrent-done-script torrent-done \
+		--start
+	then
+		herbe-bg \
+			"Torrent" \
+			"-------" \
+			"Torrent added."
+	else
+		herbe-bg \
+			"Torrent" \
+			"-------" \
+			"Failed to add torrent."
+		exit 10
+	fi
+}
+
+# Usage: `curl <url>`
+curl() {
+	filename=$(basename "$1")
+	herbe-bg \
+		"CURL" \
+		"----" \
+		"Downloading \"$filename\"..."
+	command curl \
+		-o "$filename" \
+		--output-dir ~/Downloads \
+		--retry 5 \
+		--retry-max-time 5 \
+		-C - \
+		"$1" \
+			&& herbe-bg \
+				"CURL" \
+				"----" \
+				"\"$filename\" downloaded." \
+			&& exit 0
+	herbe-bg \
+		"CURL" \
+		"----" \
+		"Failed to download \"$filename\"."
+	exit 20
+}
+
+# Usage: `dl_audio <url>`
+dl_audio() {
+	id=$(basename "$1") &&
+	herbe-bg \
+		"Audio downloader" \
+		"----------------" \
+		"Downloading $id audio..."
+	yt-dlp -i --extract-audio --audio-format mp3 "$1" \
+		&& herbe-bg \
+			"Audio downloader" \
+			"----------------" \
+			"$id audio downloaded." \
+		&& exit 0
+	herbe-bg \
+		"Audio downloader" \
+		"----------------" \
+		"Failed to download $id."
+	exit 30
+}
+
+# Usage: `dl_video <url>`
+dl_video() {
+	id=$(basename "$1") &&
+	herbe-bg \
+		"Video downloader" \
+		"----------------" \
+		"Downloading $id video..."
+	yt-dlp --add-metadata -ic -f "bestvideo[height<=720]+bestaudio/best" "$1" \
+		&& herbe-bg \
+			"Video downloader" \
+			"----------------" \
+			"$id video downloaded." \
+		&& exit 0
+	herbe-bg \
+		"Video downloader" \
+		"----------------" \
+		"Failed to download $id."
+	exit 40
+}
+
+# Usage: `open_in_browser <url>`
+open_in_browser() {
+	herbe-bg \
+		"Browser" \
+		"-------" \
+		"Opening $url..."
+	! "$BROWSER" "$1" \
+		&& herbe-bg \
+			"Browser" \
+			"-------" \
+			"Failed to open $url." \
+		&& exit 50
+}
+
+# Usage: `play_with_mpv <url>`
+play_with_mpv() {
+	herbe-bg \
+		"Mpv" \
+		"---" \
+		"Loading $url..."
+	! mpv "$1" \
+		&& herbe-bg \
+			"Mpv" \
+			"---" \
+			"Failed to load $url." \
+		&& exit 60
+}
+
+# Usage: `show_using <url> <program>`
+show_using() {
+	herbe-bg \
+		"Show using" \
+		"----------" \
+		"Downloading $url to show using $1..."
+	! temp=$(_download_temp "$1") \
+		&& herbe-bg \
+			"Show using" \
+			"----------" \
+			"Failed to download $url." \
+		&& exit 70
+	! "$2" "$temp" \
+		&& herbe-bg \
+			"Show using" \
+			"----------" \
+			"Failed to show using $1." \
+		&& exit 71
+}
+
+# Usage: `_download_temp <url>`
+_download_temp() {
+	path="/tmp/$(_extract_filename_from_url "$1")" \
+		&& command curl -sL "$1" > "$path" \
+		&& echo "$path"
+}
+
+# Usage: `_extract_filename_from_url <url>`
+_extract_filename_from_url() {
+	filename=$(basename "$1")
+	[ "${#filename}" -gt "255" ] \
+		&& filename=$(echo "$filename" | cut -c1-255)
+	echo "$filename"
+}
+
+main() {
+	# Prompt url
+	if [ -n "$1" ]; then
+		url="$1"
+	else
+		url=$(printf "" | dmenu -b -p 'Paste URL:')
+		[ -z "$url" ] && exit 0
+	fi
+
+	# Prompt handler
+	handler=$(printf "%b" "$HANDLERS" | dmenu -b -i -p "Open it with?")
+	{ [ -z "$handler" ] || [ -n "${HANDLERS##*"${handler}"*}" ]; } && exit 1
+
+	# Run handler
+	case ${handler} in
+		add-torrent) add_torrent "$url" ;;
+		browser) open_in_browser "$url" ;;
+		curl) curl "$url" ;;
+		dl-audio) dl_audio "$url" ;;
+		dl-video) dl_video "$url" ;;
+		mpv) play_with_mpv "$url" ;;
+		zathura) show_using "$url" zathura ;;
+		nsxiv) show_using "$url" nsxiv ;;
+		*) ;;
+	esac
+}
+
+main "$@"

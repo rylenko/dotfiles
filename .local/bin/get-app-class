@@ -1,0 +1,18 @@
+#!/bin/sh
+
+class=$(xprop | grep CLASS | awk '{print $4}')
+
+if [ "$?" -eq "0" ]; then
+	if [ -z "$class" ]; then
+		status="Success: class not found."
+	else
+		status="Success: $class."
+	fi
+else
+	status="Fail."
+fi
+
+herbe-bg \
+	"Application class getter" \
+	"------------------------" \
+	"$status"

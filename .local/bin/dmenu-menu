@@ -1,0 +1,16 @@
+#!/bin/sh
+
+lock_str="🔒 lock"
+hibernate_str="🐻 hibernate"
+display_off_str="📺 display off"
+reboot_str="🔃 reboot"
+shutdown_str="🚪 shutdown"
+
+case "$(printf "$lock_str\n$hibernate_str\n$display_off_str\n$reboot_str\n$shutdown_str" | dmenu -i -p 'Action: ')" in
+	"$lock_str") slock ;;
+	"$hibernate_str") slock loginctl hibernate -i ;;
+	"$display_off_str") xset dpms force off ;;
+	"$reboot_str") loginctl reboot -i ;;
+	"$shutdown_str") loginctl poweroff -i ;;
+	*) exit 1 ;;
+esac

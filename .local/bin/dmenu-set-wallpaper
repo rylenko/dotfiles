@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Select wallpaper
+filenames=$(ls "$WALLPAPERS_DIR")
+selected="$(echo "$filenames" | dmenu -b -i -p "Which wallpaper?")"
+{ [ -z "$selected" ] || [ -n "${filenames##*"${selected}"*}" ]; } && exit 1
+
+# Set wallpaper
+cp "$WALLPAPERS_DIR/$selected" "$WALLPAPER_CURRENT_PATH" \
+	&& xwallpaper --zoom "$WALLPAPER_CURRENT_PATH" \
+	&& status="Success" \
+	|| status="Fail"
+herbe-bg \
+	"Wallpaper setter" \
+	"----------------" \
+	"$status: $selected."

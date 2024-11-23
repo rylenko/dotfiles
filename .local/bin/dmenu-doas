@@ -1,0 +1,27 @@
+#!/usr/bin/expect --
+
+# don't mind the man behind the curtain
+log_user 0
+
+# no command, then nothing to do
+if { $argc == 0 } { exit 0 }
+
+# treat all arguments as command input
+set cmd [lrange $argv 0 end];
+
+# fallback to dmenu
+set askpass "dmenu -b -P -p Password:"
+
+# read password from user
+set pwd [exec {*}$askpass]
+
+# spawn doas operation
+spawn doas {*}$cmd
+
+# send password and execute command
+expect "doas*password:" {
+	send -- "$pwd\r"
+	expect \r
+	log_user 1
+	expect eof
+}
