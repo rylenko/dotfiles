@@ -82,7 +82,8 @@ static const Layout layouts[] = {
 static const Key keys[] = {
 	/* modifier         key        function        argument */
 	{ MODKEY,           XK_a,      spawn,          {.v = (const char *[]){ "get-app-class", NULL }} },
-	{ MODKEY,           XK_b,      togglebar,      {0} },
+	{ MODKEY,           XK_b,      spawn,          {.v = (const char *[]){ TERM, "-e", "bluetoothctl", NULL }} },
+	{ MODKEY|ShiftMask, XK_b,      togglebar,      {0} },
 	{ MODKEY,           XK_d,      spawn,          {.v = (const char *[]){ "dmenu_run", NULL }} },
 	{ MODKEY,           XK_f,      fullscreen,     {0} },
 	{ MODKEY|ShiftMask, XK_f,      togglefloating, {0} },
