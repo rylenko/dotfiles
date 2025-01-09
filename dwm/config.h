@@ -106,7 +106,7 @@ static const Key keys[] = {
 	{ MODKEY,           XK_v,      spawn,          {.v = (const char *[]){ "virt-manager", NULL }} },
 	{ MODKEY,           XK_w,      spawn,          {.v = (const char *[]){ BROWSER, NULL }} },
 	{ MODKEY|ShiftMask, XK_w,      spawn,          {.v = (const char *[]){ "dmenu-set-wallpaper", NULL }} },
-	{ MODKEY,           XK_x,      spawn,          {.v = (const char *[]){ "nekobox", NULL }} },
+	{ MODKEY,           XK_x,      spawn,          {.v = (const char *[]){ "nekoray", NULL }} },
 	{ MODKEY,           XK_z,      zoom,           {0} },
 	{ MODKEY,           XK_Print,  spawn,          {.v = (const char *[]){ "make-screenshot", NULL }} },
 	{ MODKEY,           XK_Return, spawn,          {.v = (const char *[]){ TERM, NULL }} },
