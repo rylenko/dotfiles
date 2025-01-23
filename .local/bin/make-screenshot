@@ -1,6 +1,6 @@
 #!/bin/sh
 
-filename="$(date +%F_%T).png"
+filename="$(date +%F_%H-%M-%S).png"
 import "$filename" \
 	&& status="Success: $filename" \
 	|| status="Fail."
