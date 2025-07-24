@@ -58,6 +58,7 @@ alias \
 	ls="ls --color=auto" \
 	mkdir="mkdir -p" \
 	mv="mv -iv" \
+	n="https_proxy=\"socks5://127.0.0.1:2080\"" \
 	p="doas pacman" \
 	rm="rm -iv" \
 	t="tmux -u" \
