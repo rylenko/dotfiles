@@ -1,6 +1,6 @@
 #!/bin/sh
 
-level=$(acpi -b | grep -P -o '[0-9]+(?=%)')
+level=$(acpi -b | grep -P -o '[0-9]+(?=%)' | tail -n 1)
 
 if acpi -b | grep -q "Charging"; then
 	emoji="🔌 "

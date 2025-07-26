@@ -3,7 +3,7 @@
 DELAY=60
 
 while true; do
-	level=$(acpi -b | grep -P -o '[0-9]+(?=%)')
+	level=$(acpi -b | grep -P -o '[0-9]+(?=%)' | tail -n 1)
 	[ "$level" -le "$BATTERY_LOW_LEVEL_FROM" ] \
 		&& ! acpi -b | grep -q "Charging" \
 		&& herbe-bg \
