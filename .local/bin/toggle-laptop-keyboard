@@ -1,0 +1,18 @@
+#!/bin/bash
+
+read keyboard <<< $(xinput | sed -nre '/AT|AT/s/.*id=([0-9]*).*/\1/p')
+enabled=$(xinput list-props "$keyboard" | grep "Device Enabled" | grep -o "[01]$")
+
+if [ "$enabled" -eq '1' ]; then
+	xinput --disable "$keyboard" \
+		&& herbe-bg \
+			"Laptop's keyboard" \
+			"--------" \
+			"Disabled"
+else
+	xinput --enable "$keyboard" \
+		&& herbe-bg \
+			"Laptop's keyboard" \
+			"--------" \
+			"Enabled"
+fi

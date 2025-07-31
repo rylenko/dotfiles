@@ -3,7 +3,7 @@
 read touchpad <<< $(xinput | sed -nre '/TouchPad|Touchpad/s/.*id=([0-9]*).*/\1/p')
 enabled=$(xinput list-props "$touchpad" | grep "Device Enabled" | grep -o "[01]$")
 
-if [ "$enabled" -eq '1' ];then
+if [ "$enabled" -eq '1' ]; then
 	xinput --disable "$touchpad" \
 		&& herbe-bg \
 			"Touchpad" \

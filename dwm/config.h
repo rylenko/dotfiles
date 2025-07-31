@@ -102,6 +102,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask, XK_n,      spawn,          {.v = (const char *[]){ TERM, "-e", "nmtui", NULL }} },
 	{ MODKEY|ShiftMask, XK_q,      quit,           {0} },
 	{ MODKEY,           XK_t,      spawn,          {.v = (const char *[]){ "toggle-touchpad", NULL }} },
+	{ MODKEY|ShiftMask, XK_t,      spawn,          {.v = (const char *[]){ "toggle-laptop-keyboard", NULL }} },
 	{ MODKEY,           XK_u,      spawn,          {.v = (const char *[]){ "dmenu-handle-link", NULL }} },
 	{ MODKEY,           XK_v,      spawn,          {.v = (const char *[]){ "virt-manager", NULL }} },
 	{ MODKEY,           XK_w,      spawn,          {.v = (const char *[]){ BROWSER, NULL }} },
