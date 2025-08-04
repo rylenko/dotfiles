@@ -19,7 +19,8 @@ xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
 setxkbmap \
 	-layout "us,ru" \
 	-option "grp:alt_shift_toggle" \
-	-option "ctrl:nocaps"
+	-option "ctrl:nocaps" \
+	-option "compose:ralt"
 
 # Load resources
 xrdb -merge "$HOME/.config/x11/xresources"
